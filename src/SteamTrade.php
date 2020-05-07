@@ -1,6 +1,6 @@
 <?php
 
-namespace Steamtrade;
+namespace vemarun\Steamtrade;
 
 use Unirest\File;
 use Unirest\Method;

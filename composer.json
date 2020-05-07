@@ -3,7 +3,7 @@
     "description": "Steam Trade Offers library for PHP (based on node.js library by Alex7Kom)",
     "type": "library",
     "autoload": {
-        "psr-4": {"vemarun\\trade\\": "/src"}
+        "psr-4": {"vemarun\\Steamtrade\\": "/src"}
     },
     "require": {}
 }
