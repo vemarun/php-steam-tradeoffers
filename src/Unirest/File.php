@@ -1,6 +1,6 @@
 <?php
 
-namespace Unirest;
+namespace vemarun\Steamtrade\Unirest;
 
 class File
 {

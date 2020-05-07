@@ -2,12 +2,9 @@
 
 namespace vemarun\Steamtrade;
 
-use Unirest\File;
-use Unirest\Method;
-use Unirest\Request;
-use Unirest\Response;
+use vemarun\Steamtrade\Unirest\Request;
 use FFI\Exception;
-require_once 'simple_html_dom.php';
+require_once dirname(__FILE__).'\simple_html_dom.php';
 /**
 * Steam Trade PHP Class
 * Based on node.js version by Alex7Kom https://github.com/Alex7Kom/node-steam-tradeoffers
@@ -79,7 +76,7 @@ class SteamTrade
 		}
 
 		$uri = 'https://steamcommunity.com/my/inventory/json/'.$options['appId'].'/' .$options['contextId'].'/?'.http_build_query($query);
-		return $this->_loadInventory(array(), $uri, array('json' => TRUE), $options['contextId'], null);
+		return $this->_loadInventory(array(), $uri, ['headers'=>array('json' => TRUE)], $options['contextId'], null);
 	}
 
 	private function _loadInventory($inventory, $uri, $options, $contextid, $start = null) {

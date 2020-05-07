@@ -1,9 +1,9 @@
 <?php
 
-namespace Unirest;
+namespace vemarun\Steamtrade\Unirest;
 
-use Unirest\Method;
-use Unirest\Response;
+use vemarun\Steamtrade\Unirest\Method;
+use vemarun\Steamtrade\Unirest\Response;
 
 class Request
 {
