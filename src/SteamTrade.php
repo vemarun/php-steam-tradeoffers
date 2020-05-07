@@ -1,5 +1,12 @@
 <?php
-require_once 'Unirest.php';
+
+namespace Steamtrade;
+
+use Unirest\File;
+use Unirest\Method;
+use Unirest\Request;
+use Unirest\Response;
+use FFI\Exception;
 require_once 'simple_html_dom.php';
 /**
 * Steam Trade PHP Class
@@ -30,9 +37,9 @@ class SteamTrade
 		if($this->apiKey) {
 			return;
 		}
-		$headers = array('Cookie' => $this->webCookies,'Timeout'=> Unirest\Request::timeout(5));
+		$headers = array('Cookie' => $this->webCookies,'Timeout'=> Request::timeout(5));
 		try {
-			$response = Unirest\Request::get('https://steamcommunity.com/dev/apikey',$headers);
+			$response = Request::get('https://steamcommunity.com/dev/apikey',$headers);
 		} catch (Exception $e) {
 			echo 'Error: '.$e->getMessage(); #TODO: show url in error
 			return;
@@ -56,7 +63,7 @@ class SteamTrade
 
 		$headers = array('Cookie' => $this->webCookies);
 		$body = array('domain' => 'localhost', 'agreeToTerms' => 'agreed', 'sessionid' => $this->sessionId, 'submit' => 'Register');
-		$response = Unirest\Request::post('https://steamcommunity.com/dev/registerkey', $headers, $body);
+		$response = Request::post('https://steamcommunity.com/dev/registerkey', $headers, $body);
 		$this->getApiKey();
 	}
 
@@ -82,7 +89,7 @@ class SteamTrade
 			$options['uri'] = $options['uri'] + '&' + http_build_query(array('start'=>'start'));
 		}
 
-		$headers = array('Cookie' => $this->webCookies,'Timeout'=> Unirest\Request::timeout(5));
+		$headers = array('Cookie' => $this->webCookies,'Timeout'=> Request::timeout(5));
 		if($options['headers']) {
 			foreach ($options['headers'] as $key => $value) {
 				$headers[$key] = $value;
@@ -90,7 +97,7 @@ class SteamTrade
 		}
 
 		try {
-			$response = Unirest\Request::get($uri,$headers);
+			$response = Request::get($uri,$headers);
 		} catch (Exception $e) {
 			echo 'Error: '.$e->getMessage(); #TODO: show url in error
 			return;
@@ -176,7 +183,7 @@ class SteamTrade
 		    'json' => TRUE,
 		    'headers' => array(
 		      'referer' => 'https://steamcommunity.com/tradeoffer/'.$offer.'/?partner='.$this->toAccountID($options['partnerSteamId'])
-		    ) , $options['contextId'], null));	
+		    )) , $options['contextId'], null);	
 	}
 
 	public function makeOffer($options) {
@@ -213,9 +220,9 @@ class SteamTrade
 	  		$referer = 'https://steamcommunity.com/tradeoffer/new/?'.http_build_query($query);
 	  	}
 
-	  	$headers = array('Cookie' => $this->webCookies,'Timeout'=> Unirest\Request::timeout(5));
+	  	$headers = array('Cookie' => $this->webCookies,'Timeout'=> Request::timeout(5));
 	  	$headers['referer'] = $referer;
-	  	$response = Unirest\Request::post('https://steamcommunity.com/tradeoffer/new/send', $headers, $formFields);
+	  	$response = Request::post('https://steamcommunity.com/tradeoffer/new/send', $headers, $formFields);
 	  	
 	  	if($response->code != 200) {
 	  		die('Error making offer! Server response code: '.$response->code);
@@ -280,7 +287,7 @@ class SteamTrade
 			$body = $options['params'];
 		}
 
-		$response = ($options['post'] ? Unirest\Request::post($uri, null, $body) : Unirest\Request::get($uri));
+		$response = ($options['post'] ? Request::post($uri, null, $body) : Request::get($uri));
 		
 		if($response->code != 200) {
 			die('Error doing API call. Server response code: '.$response->code);
@@ -327,9 +334,9 @@ class SteamTrade
 
 	  	$referer = 'https://steamcommunity.com/tradeoffer/'.$options['tradeOfferId'].'/';
 
-	  	$headers = array('Cookie' => $this->webCookies,'Timeout'=> Unirest\Request::timeout(5));
+	  	$headers = array('Cookie' => $this->webCookies,'Timeout'=> Request::timeout(5));
 	  	$headers['referer'] = $referer;
-	  	$response = Unirest\Request::post('https://steamcommunity.com/tradeoffer/'.$options['tradeOfferId'].'/accept', $headers, $form);
+	  	$response = Request::post('https://steamcommunity.com/tradeoffer/'.$options['tradeOfferId'].'/accept', $headers, $form);
 
 	  	if($response->code != 200) {
 	  		die('Error accepting offer. Server response code: '.$response->code);
@@ -346,8 +353,8 @@ class SteamTrade
 
 	public function getOfferToken() {
 
-		$headers = array('Cookie' => $this->webCookies,'Timeout'=> Unirest\Request::timeout(5));
-		$response = Unirest\Request::get('https://steamcommunity.com/my/tradeoffers/privacy', $headers);
+		$headers = array('Cookie' => $this->webCookies,'Timeout'=> Request::timeout(5));
+		$response = Request::get('https://steamcommunity.com/my/tradeoffers/privacy', $headers);
 
 		if($response->code != 200) {
 			die('Error retrieving offer token. Server response code: '.$response->code);
@@ -364,8 +371,8 @@ class SteamTrade
 	}
 
 	public function getItems($options) {
-		$headers = array('Cookie' => $this->webCookies,'Timeout'=> Unirest\Request::timeout(5));
-		$response = Unirest\Request::get('https://steamcommunity.com/trade/'.$options['tradeId'].'/receipt/', $headers);
+		$headers = array('Cookie' => $this->webCookies,'Timeout'=> Request::timeout(5));
+		$response = Request::get('https://steamcommunity.com/trade/'.$options['tradeId'].'/receipt/', $headers);
 
 		if($response->code != 200) {
 			die('Error get items. Server response code: '.$response->code);
